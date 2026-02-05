@@ -1,0 +1,446 @@
+</head>
+<body><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Luxury Fashion Icons</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+    --bg: #0d0d0d;
+    --bg2: #1a1a1a;
+    --text: #ffffff;
+    --accent: #ff4df0;
+    --glass: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.12);
+}
+
+.light {
+    --bg: #f4f4f4;
+    --bg2: #ffffff;
+    --text: #111;
+    --accent: #e100c3;
+    --glass: rgba(0,0,0,0.05);
+    --border: rgba(0,0,0,0.12);
+}
+
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    transition: 0.3s;
+}
+
+header {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+header .bg {
+    position: absolute;
+    inset: 0;
+    background: url("https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?auto=format&fit=crop&w=1600&q=90") center/cover no-repeat;
+    transform: scale(1.2);
+    transition: 0.3s ease-out;
+}
+header .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.7), var(--bg));
+}
+header h1 {
+    font-size: 70px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    z-index: 2;
+    color: white;
+    animation: fadeIn 1.2s forwards;
+}
+@media(max-width:768px){
+    header h1 { font-size: 40px; letter-spacing:4px; }
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    backdrop-filter: blur(14px);
+    background: var(--glass);
+    border-bottom: 1px solid var(--border);
+    z-index: 2000;
+    padding: 14px 0;
+    transform: translateY(-100%);
+    animation: slideDown 1.2s forwards;
+}
+nav .nav-inner {
+    width: 90%;
+    max-width: 1400px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--accent);
+}
+nav ul {
+    display: flex;
+    gap: 35px;
+    list-style: none;
+}
+nav ul li a {
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+}
+nav ul li a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: var(--accent);
+    transition: 0.3s;
+}
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+.grid {
+    width: 90%;
+    max-width: 1600px;
+    margin: 40px auto 90px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px;
+}
+
+.card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: 0.35s;
+    opacity: 0;
+    transform: translateY(40px) rotateY(0deg);
+    cursor:pointer;
+}
+.card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: 0.7s;
+}
+
+.card:hover {
+    transform: scale(1.03) rotateY(8deg);
+    box-shadow: 0 0 25px rgba(255, 77, 240, 0.3);
+}
+
+.card img.cover {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: 0.4s;
+}
+.card:hover img.cover { transform: scale(1.05); }
+
+.card-content { padding: 18px; }
+.card-logo {
+    width: 80px;
+    margin-bottom: 10px;
+    filter: invert(1);
+}
+.card h2 {
+    color: var(--accent);
+    font-size: 20px;
+}
+.more-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    border:none;
+    font-family:inherit;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 5000;
+}
+.modal.active { display: flex; }
+.modal-content {
+    background: var(--bg2);
+    padding: 25px;
+    max-width: 750px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+.modal-close {
+    float: right;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--accent);
+}
+
+.modal img {
+    width: 100%;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.theme-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+@keyframes slideDown {
+    to { transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <div class="logo">FASHION</div>
+        <ul id="menu">
+            <li><a href="#dior">Dior</a></li>
+            <li><a href="#balenciaga">Balenciaga</a></li>
+            <li><a href="#prada">Prada</a></li>
+        </ul>
+    </div>
+</nav>
+
+<header>
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <h1>Luxury Fashion Icons</h1>
+</header>
+
+<div class="grid">
+
+<div class="card" id="dior" data-modal="modal-dior">
+    <img class="cover" src="https://www.buro247.ru/thumb/670x830_0/images/dior-virtual-reality-backstage-access-01.jpg" loading="lazy" alt="Dior Fashion">
+    <div class="card-content">
+        <img class="card-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Dior_Logo_2022.svg/960px-Dior_Logo_2022.svg.png" loading="lazy" alt="Dior Logo">
+        <h2>Dior</h2>
+        <p>Роскошь и культовые коллаборации</p>
+        <button class="more-btn">Подробнее</button>
+    </div>
+</div>
+
+<div class="card" id="balenciaga" data-modal="modal-balenciaga">
+    <img class="cover" src="https://prorusdesign.ru/wp-content/uploads/2020/12/balenciaga-afterworld-video-game-fashion-design_dezeen_2364_col_16-1024x581-1-412x234.jpg" loading="lazy" alt="Balenciaga Fashion">
+    <div class="card-content">
+        <img class="card-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Balenciaga_Logo.svg/960px-Balenciaga_Logo.svg.png" loading="lazy" alt="Balenciaga Logo">
+        <h2>Balenciaga</h2>
+        <p>Футуристический дизайн и коллаборации</p>
+        <button class="more-btn">Подробнее</button>
+    </div>
+</div>
+
+<div class="card" id="prada" data-modal="modal-prada">
+    <img class="cover" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp_webp/e9ac7746313845.584fd65dc6333.jpg" loading="lazy" alt="Prada Fashion">
+    <div class="card-content">
+        <img class="card-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Prada-Logo.svg/960px-Prada-Logo.svg.png" loading="lazy" alt="Prada Logo">
+        <h2>Prada</h2>
+        <p>Концептуальная мода и смелые проекты</p>
+        <button class="more-btn">Подробнее</button>
+    </div>
+</div>
+
+</div>
+<div class="modal" id="modal-dior">
+  <div class="modal-content">
+    <div class="modal-close">&times;</div>
+    <h2>Dior — Революция женственности и коллаборации</h2>
+
+    <img src="https://cdn1.tenchat.ru/static/vbc-gostinder/2024-01-27/260f3c20-6ff2-4d5a-b172-058d0952821b.jpeg?width=698&height=867&fmt=webp" loading="lazy" alt="Dior Image 1">
+    <img src="https://cdn1.tenchat.ru/static/vbc-gostinder/2024-01-27/b774addf-c161-4313-bafb-2c0e2787cee0.jpeg?width=698&height=867&fmt=webp" loading="lazy" alt="Dior Image 2">
+    <img src="https://cdn1.tenchat.ru/static/vbc-gostinder/2024-01-27/5f52689b-be87-46eb-9166-648d963414af.jpeg?width=698&height=867&fmt=webp" loading="lazy" alt="Dior Image 3">
+    <img src="https://cdn1.tenchat.ru/static/vbc-gostinder/2024-01-27/88322dc2-85c3-4874-974d-35418c6774b3.jpeg?width=698&height=867&fmt=webp" loading="lazy" alt="Dior Image 4">
+    <img src="https://static.sobaka.ru/images/image/01/05/59/22/_normal.jpg?v=1543581319" loading="lazy" alt="Dior Image 5">
+    <img src="https://static.sobaka.ru/images/image/01/05/59/12/_normal.jpg?v=1543582201" loading="lazy" alt="Dior Image 6">
+    <img src="https://static.sobaka.ru/images/image/01/05/59/13/_normal.jpg?v=1543582212" loading="lazy" alt="Dior Image 7">
+    <p><strong>Технологии как инструмент погружения в моду</strong></p>
+    <p>Модный дом Dior использует технологии в показах как средство создания особого художественного пространства, в котором зритель становится не просто наблюдателем, а участником модного события. В последние годы бренд активно экспериментирует с виртуальной реальностью, дополненной реальностью и форматами 360-градусного просмотра.</p>
+
+    <h3>Показы в формате 360° и VR</h3>
+    <p>Одним из ключевых примеров являются показы, представленные в формате 360° и VR. Такой подход позволяет зрителю:</p>
+    <ul>
+      <li>рассматривать коллекцию с разных ракурсов;</li>
+      <li>приближать детали;</li>
+      <li>обращать внимание на фактуру тканей, сложную вышивку и конструкцию силуэтов.</li>
+    </ul>
+    <p>Это особенно важно для Dior, где внимание к деталям является частью философии бренда.</p>
+
+    <h3>Демократизация высокой моды</h3>
+    <p>Технологии позволяют Dior выйти за пределы физического подиума и сделать показы доступными для мировой аудитории. Даже находясь в другой стране, зритель может «оказаться» в пространстве показа и почувствовать его атмосферу. В этом смысле цифровые технологии становятся инструментом демократизации высокой моды.</p>
+
+    <h3>Искусственный интеллект в проектах Dior</h3>
+    <p>Искусственный интеллект в проектах Dior используется не для создания одежды, а для анализа данных. С его помощью бренд:</p>
+    <ul>
+      <li>изучает реакцию аудитории;</li>
+      <li>анализирует визуальные предпочтения;</li>
+      <li>определяет популярность образов.</li>
+    </ul>
+    <p>Эти данные помогают улучшать формат показов, визуальные решения и цифровые презентации коллекций.</p>
+
+    <h3>Синтез традиций и инноваций</h3>
+    <p>Таким образом, Dior сочетает традиции высокой моды с современными технологиями, используя их как средство усиления эстетики и эмоционального воздействия показа.</p>
+  </div>
+</div>
+
+<div class="modal" id="modal-balenciaga">
+  <div class="modal-content">
+    <div class="modal-close">&times;</div>
+    <h2>Balenciaga — Архитектурная мода и совместные проекты</h2>
+
+    <img src="https://www.buro247.ru/images/2022/03/1646134108154071.jpg" loading="lazy" alt="Balenciaga Image 1">
+    <img src="https://www.buro247.ru/images/2022/03/1646134108491814.jpg" loading="lazy" alt="Balenciaga Image 2">
+    <img src="https://www.buro247.ru/images/2022/03/164613410771213.jpg" loading="lazy" alt="Balenciaga Image 3">
+    <img src="https://prorusdesign.ru/wp-content/uploads/2020/12/balenciaga-afterworld-video-game-fashion-design_dezeen_2364_col_4-1536x866-1-412x232.jpg" loading="lazy" alt="Balenciaga Image 4">
+    <img src="https://prorusdesign.ru/wp-content/uploads/2020/12/balenciaga-afterworld-video-game-fashion-design_dezeen_2364_col_18-1024x579-1-412x233.jpg" loading="lazy" alt="Balenciaga Image 5">
+    <img src="https://media.vogue.co.uk/photos/5fcd17f0cb233b84068b6731/master/w_2048%2Cc_limit/BALENCIAGA%2520FALL%252021%2520_%2520LOOK%252050.jpg" loading="lazy" alt="Balenciaga Image 6">
+    <img src="https://media.vogue.co.uk/photos/5fcd17bc94cc0b65da0f151f/master/w_2048%2Cc_limit/BALENCIAGA%2520FALL%252021%2520_%2520LOOK%252040.jpg" loading="lazy" alt="Balenciaga Image 7">
+    <img src="https://media.vogue.co.uk/photos/5fcd182b94cc0b65da0f1521/master/w_2048%2Cc_limit/BALENCIAGA%2520FALL%252021%2520_%2520LOOK%252010.jpg" loading="lazy" alt="Balenciaga Image 8">
+    <img src="https://www.buro247.ru/thumb/950x701/local/images/buro/galleries/2025/03/00080-balenciaga-fall-2025-ready-to-wear-credit-gorunway.jpg.jpg" loading="lazy" alt="Balenciaga Image 9">
+    <p><strong>Balenciaga: иммерсивная мода и цифровые миры</strong></p>
+    <p>Balenciaga — один из самых технологически экспериментальных модных домов современности. Бренд активно использует виртуальные пространства, цифровые среды, смешанную и дополненную реальность, создавая новые форматы взаимодействия с модой. Для Balenciaga показ — это не только демонстрация одежды, но и полноценный цифровой опыт, где граница между реальностью и виртуальным пространством стирается.</p>
+
+    <h3>Иммерсивные показы и VR/AR технологии</h3>
+    <p>Одним из ключевых направлений является создание иммерсивных показов с использованием технологий виртуальной и смешанной реальности. Например, бренд сотрудничал с Apple Vision Pro, предоставляя зрителям возможность находиться «внутри» показа. С помощью VR и 3D-технологий зрители могут наблюдать коллекцию с разных ракурсов, ощущать масштаб сцены и движение моделей, словно находясь на подиуме.</p>
+    <p>Balenciaga экспериментирует не только с VR/AR, но и с цифровыми подиумами и пространственной графикой, создавая уникальные визуальные эффекты, которые невозможно повторить в обычной физической среде. Эти технологии усиливают впечатление от коллекций и делают показ доступным глобально.</p>
+
+    <h3>Виртуальные коллаборации и цифровые игры</h3>
+    <p>Balenciaga активно исследует возможности игровой индустрии и виртуальных платформ. Например, бренд выпустил коллекцию, интегрированную с Fortnite, позволяя игрокам использовать цифровые образы Balenciaga внутри игры. Подобные коллаборации открывают моде новые аудитории, особенно среди молодого поколения, для которого цифровое пространство является естественной средой взаимодействия.</p>
+    <p>Кроме того, Balenciaga экспериментирует с метаверсом и цифровыми коллекциями, создавая виртуальные образы и аватары, которые существуют только в цифровом мире. Эти проекты позволяют исследовать, как мода может функционировать за пределами физической одежды и пространства.</p>
+
+    <h3>Искусственный интеллект и анализ цифрового опыта</h3>
+    <p>Искусственный интеллект используется Balenciaga для создания виртуальных образов, 3D-моделирования и анализа реакции аудитории. С его помощью бренд может оценивать интерес зрителей к отдельным элементам коллекций, оптимизировать визуальные решения и улучшать цифровые шоу. ИИ не заменяет дизайнеров, а усиливает творческий процесс, позволяя экспериментировать с формами, текстурами и виртуальными эффектами.</p>
+
+    <h3>Влияние технологий на восприятие моды</h3>
+    <p>Благодаря технологиям и ИИ, Balenciaga превращает показ в интерактивный и цифровой опыт, где зритель становится активным участником, а границы между физической и виртуальной модой размываются. Использование VR, AR, метаверса и коллабораций с играми делает бренд одним из пионеров цифровой моды и показывает, что будущее индустрии — это синтез творчества и технологий.</p>
+  </div>
+</div>
+
+<div class="modal" id="modal-prada">
+  <div class="modal-content">
+    <div class="modal-close">&times;</div>
+    <h2>Prada — Концептуальная мода и коллаборации</h2>
+
+    <img src="https://static.sobaka.ru/images/image/00/94/71/10/_normal.jpg?v=1519369623" loading="lazy" alt="Prada Image 1">
+    <img src="https://static.sobaka.ru/images/image/00/94/71/22/_normal.jpg?v=1519370268" loading="lazy" alt="Prada Image 2">
+    <img src="https://static.sobaka.ru/images/image/00/94/71/15/_normal.jpg?v=1519370263" loading="lazy" alt="Prada Image 3">
+    <img src="https://static.sobaka.ru/images/image/00/94/71/28/_normal.jpg?v=1519370808" loading="lazy" alt="Prada Image 4">
+    <img src="https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_66f1e52911b9fb542f7f7512_66f1e95e7d59bf2010141b04/scale_1200" loading="lazy" alt="Prada Image 5">
+    <img src="https://www.prada.com/content/dam/pradanux/pradasphere/2020/special-projects/05/prada_vr/gallery/003_DT.jpg/_jcr_content/renditions/cq5dam.web.1680.1680.webp" loading="lazy" alt="Prada Image 6">
+    <img src="https://www.prada.com/content/dam/pradanux/pradasphere/2020/special-projects/05/prada_vr/gallery/001_DT.jpg/_jcr_content/renditions/cq5dam.web.1680.1680.webp" loading="lazy" alt="Prada Image 7">
+    <img src="https://www.prada.com/content/dam/pradanux/pradasphere/2020/special-projects/05/prada_vr/gallery/006_DT.jpg/_jcr_content/renditions/cq5dam.web.1680.1680.webp" loading="lazy" alt="Prada Image 8">
+
+
+    <p><strong>Prada: технологии и искусственный интеллект в моде</strong></p>
+    <p>Prada — один из ведущих модных домов, который активно интегрирует технологии и искусственный интеллект в процесс создания и презентации моды. Для бренда ИИ не заменяет дизайнеров, а становится инструментом анализа, прогнозирования и оптимизации, позволяя сочетать креативность с точными данными.</p>
+
+    <h3>Цифровые показы</h3>
+    <p>Prada преобразует традиционные показы в цифровые и интерактивные форматы. В рамках Digital Fashion Week и других онлайн-шоу бренд использует многокамерную съёмку, экраны и онлайн-трансляции. Зрители могут наблюдать коллекцию с разных ракурсов, рассматривать детали тканей и силуэтов, а также взаимодействовать с показом через цифровые платформы. Такой подход позволяет делать моду доступной для глобальной аудитории, сохраняя при этом высокий уровень эстетики и эмоционального воздействия.</p>
+
+    <h3>Искусственный интеллект в анализе и прогнозировании</h3>
+    <p>Искусственный интеллект играет ключевую роль в анализе аудитории и прогнозировании трендов. Алгоритмы обрабатывают данные из социальных сетей, онлайн-трансляций показов и реакции пользователей, позволяя бренду понимать:</p>
+    <ul>
+      <li>какие образы и элементы коллекций привлекают наибольшее внимание;</li>
+      <li>как аудитория реагирует на цифровые форматы показов;</li>
+      <li>какие силуэты, цвета и текстуры пользуются спросом.</li>
+    </ul>
+    <p>Эта информация помогает Prada точнее планировать новые коллекции, улучшать визуальную подачу и адаптировать показы под интересы зрителей. При этом все дизайнерские решения остаются за людьми — ИИ служит лишь вспомогательным инструментом.</p>
+
+    <h3>Оптимизация процессов</h3>
+    <p>Применение ИИ также позволяет бренду оптимизировать внутренние процессы:</p>
+    <ul>
+      <li>улучшать планирование производства;</li>
+      <li>прогнозировать спрос на коллекции;</li>
+      <li>снижать избыточное производство и уменьшать отходы.</li>
+    </ul>
+    <p>Таким образом, технологии делают Prada не только инновационным, но и более устойчивым брендом.</p>
+
+    <h3>Влияние технологий на восприятие моды</h3>
+    <p>Благодаря технологиям и ИИ, показы Prada становятся не просто демонстрацией одежды, а интерактивным опытом, где зритель вовлечён в процесс, а данные помогают бренду создавать более точные и актуальные коллекции. Это сочетание креатива и аналитики отражает современный подход к моде, где технологии и искусственный интеллект усиливают творческое видение дизайнеров и расширяют возможности для взаимодействия с глобальной аудиторией.</p>
+    </p>
+  </div>
+</div>
+
+<div class="theme-toggle" onclick="document.body.classList.toggle('light')">сменить тему</div>
+
+<script>
+const cards = document.querySelectorAll('.card');
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+});
+cards.forEach(card => observer.observe(card));
+
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+        const modalId = card.dataset.modal;
+        document.getElementById(modalId).classList.add('active');
+    });
+});
+
+document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.onclick = () => btn.parentElement.parentElement.classList.remove('active');
+});
+document.querySelectorAll('.modal').forEach(m => {
+    m.addEventListener('click', e => {
+        if(e.target === m) m.classList.remove('active');
+    });
+});
+
+// Закрытие модалки через Esc
+document.addEventListener('keydown', e => {
+    if(e.key === "Escape") {
+        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+    }
+});
+</script>    
+</body>
+</html>
